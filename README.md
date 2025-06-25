@@ -5,29 +5,45 @@
 ✔️ service.py: 하나의 Python 스크립트에서 "내가 지금 수요 모드인지, 공급 모드인지" 스위칭 제어  
   
 ```
+살짝 추가했어요!
+
 mutual_cloud/
-├── node/                    # 단일 노드 (P2P 역할 수행)
-│   ├── core/
-│   │   ├── task_manager.py      # 작업 요청/수신/처리 통합
-│   │   ├── container_executor.py# Kata 작업 실행
-│   │   ├── resource_monitor.py  # 자원 모니터링
-│   │   └── report_manager.py    # 리포트 생성/전송
-│   ├── network/
-│   │   ├── tcp_server.py        # TCP 서버 (작업 수신)
-│   │   └── tcp_client.py        # TCP 클라이언트 (작업 송신)
-│   ├── crypto/
-│   │   ├── aes_util.py          # AES 암호화/복호화
-│   │   └── key_manager.py       # 키 관리 (필요 시)
-│   ├── service.py               # 전체 흐름 제어 (수요/공급 스위칭)
-│   ├── launcher.py              # 실행 진입점
-│   └── config.py                # Tailscale IP, 포트, 암호화 키
+├── node/                            # P2P 단일 노드 (수요/공급 역할 모두 수행)
+│   ├── core/                        # 핵심 기능 모듈
+│   │   ├── task_manager.py          # 작업 수신/분배/관리 통합 컨트롤러
+│   │   ├── container_executor.py    # Kata Containers 또는 Docker 기반 작업 실행
+│   │   ├── resource_monitor.py      # 자원 사용률(CPU, 메모리 등) 실시간 모니터링
+│   │   └── report_manager.py        # 실행 결과 리포트 생성 및 송신
 │
-├── central/                  # 중앙 서버 (리포트 수신)
-│   ├── report_receiver.py       # 리포트 수신
-│   ├── report_db.py             # DB 저장
-│   └── report_verifier.py       # 무결성 검증
+│   ├── network/                     # 통신 계층 모듈 (P2P 직접 연결)
+│   │   ├── tcp_server.py            # TCP 서버 - 수요자 요청 수신 처리
+│   │   ├── tcp_client.py            # TCP 클라이언트 - 공급자에 작업 전송
+│   │   └── http_server.py           # (추가) Flask 기반 REST API 서버 (작업 수신/결과 반환)
 │
-└── README.md
+│   ├── crypto/                      # 보안 처리 모듈
+│   │   ├── aes_util.py              # AES 대칭키 암호화/복호화 함수
+│   │   └── key_manager.py           # 키 생성 및 관리 기능 (옵션)
+│
+│   ├── policy_agent.py              # (추가) 요청 수락/거절을 판단하는 자율 정책 기반 로직
+│   ├── service.py                   # 전체 실행 흐름 제어 (수요/공급 역할 전환 등)
+│   ├── launcher.py                  # 실행 진입점 (main 함수)
+│   └── config.py                    # 시스템 설정 (VPN IP, 포트, 키, 경로 등)
+│
+├── central/                         # 중앙 서버 기능 (중간 기록/로그용 보조 서버)
+│   ├── report_receiver.py           # 리포트 수신 (노드 → 중앙)
+│   ├── report_db.py                 # 리포트 DB 저장 (MySQL/SQLite)
+│   └── report_verifier.py           # 리포트 무결성 검증 (해시/서명 기반)
+│
+├── utils/                           # (추가) 보조 유틸리티 함수 모음
+│   └── file_helper.py               # 파일 입출력, 압축/해제 등 일반 처리 유틸
+│
+├── tests/                           # (추가) 단위 테스트 코드 모음
+│   ├── test_core.py                 # core 모듈 테스트
+│   ├── test_network.py              # network 모듈 테스트
+│   └── test_crypto.py               # 암호화 모듈 테스트
+│
+├── requirements.txt                 # Python 패키지 의존성 목록
+└── README.md                       
 ```
 
 
