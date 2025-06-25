@@ -4,7 +4,7 @@
 ✔️ crypto/: 암호화 전용 유틸 (공용 사용)
 ✔️ service.py: 하나의 Python 스크립트에서 "내가 지금 수요 모드인지, 공급 모드인지" 스위칭 제어
 
-'''
+```
 mutual_cloud/
 ├── node/                    # 단일 노드 (P2P 역할 수행)
 │   ├── core/
@@ -28,4 +28,4 @@ mutual_cloud/
 │   └── report_verifier.py       # 무결성 검증
 │
 └── README.md
-'''
+```
