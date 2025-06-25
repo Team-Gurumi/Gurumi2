@@ -1,21 +1,26 @@
-# mutual_cloud/central/report_db.py
-import csv
-from datetime import datetime
+import sqlite3
 
-# 리포트를 CSV로 저장
-def save_report_to_csv(report_data, file_path='report_data.csv'):
-    fieldnames = ['timestamp', 'task_id', 'cpu_usage', 'ram_usage', 'disk_io', 'network_io', 'result']
+def init_db(db_path='report_log.db'):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS reports (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename TEXT,
+            reporter_ip TEXT,
+            hash TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-    # 파일이 없으면 헤더 생성
-    try:
-        with open(file_path, 'x', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
-    except FileExistsError:
-        pass
-
-    # 리포트 저장
-    with open(file_path, 'a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        report_data['timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        writer.writerow(report_data)
+def save_report_metadata(filename, reporter_ip, hash_value, db_path='report_log.db'):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO reports (filename, reporter_ip, hash)
+        VALUES (?, ?, ?)
+    ''', (filename, reporter_ip, hash_value))
+    conn.commit()
+    conn.close()

@@ -1,31 +1,28 @@
-# mutual_cloud/central/report_receiver.py
-import socket
-import json
-from report_db import save_report_to_csv
+from flask import Flask, request, jsonify
+from report_verifier import verify_report_integrity
+from report_db import save_report_metadata
+import os
 
-HOST = '0.0.0.0'
-PORT = 6000
+app = Flask(__name__)
+REPORT_DIR = '/tmp/reports'
+os.makedirs(REPORT_DIR, exist_ok=True)
 
-# 리포트 수신 서버
-def start_report_server():
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((HOST, PORT))
-    server_socket.listen()
+@app.route('/upload', methods=['POST'])
+def receive_report():
+    file = request.files['report']
+    expected_hash = request.form.get('hash')
 
-    print(f"[리포트 서버 실행 중] {HOST}:{PORT}")
+    filename = file.filename
+    filepath = os.path.join(REPORT_DIR, filename)
+    file.save(filepath)
 
-    while True:
-        client_socket, addr = server_socket.accept()
-        print(f"[연결 수락] {addr}")
+    # 무결성 검증
+    if not verify_report_integrity(filepath, expected_hash):
+        return jsonify({'status': 'fail', 'reason': 'hash mismatch'}), 400
 
-        data = client_socket.recv(4096).decode()
-        report = json.loads(data)
-        print(f"[리포트 수신] {report}")
+    # DB 저장
+    save_report_metadata(filename, request.remote_addr, expected_hash)
+    return jsonify({'status': 'success'}), 200
 
-        save_report_to_csv(report)
-        print(f"[리포트 저장 완료]")
-
-        client_socket.close()
-
-if __name__ == "__main__":
-    start_report_server()
+if __name__ == '__main__':
+    app.run(port=8000)
