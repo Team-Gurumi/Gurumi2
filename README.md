@@ -35,12 +35,13 @@ mutual_cloud/
 ├── utils/                           # (추가) 보조 유틸리티 함수 모음
 │   └── file_helper.py               # 파일 입출력, 압축/해제 등 일반 처리 유틸
 │
-├── tests/                           # (추가) 단위 테스트 코드 모음
-│   ├── test_core.py                 # core 모듈 테스트
-│   ├── test_network.py              # network 모듈 테스트
-│   └── test_crypto.py               # 암호화 모듈 테스트
+├──tests/
+|  ├── test_core.py       # core 모듈의 핵심 기능을 테스트 (작업 실행, 결과 생성 등)
+|  ├── test_network.py    # 네트워크 모듈 테스트 (작업 수신/전송, HTTP 응답 등)
+|  └── test_crypto.py     # 암호화 모듈 테스트 (AES 암복호화 정상 동작 여부)
 │
 ├── requirements.txt                 # Python 패키지 의존성 목록
+├── dev-requirments.txt              # 개발/테스트용 패키지 의존성 목록
 └── README.md                       
 ```
 
