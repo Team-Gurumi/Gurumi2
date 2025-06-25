@@ -29,3 +29,19 @@ mutual_cloud/
 │
 └── README.md
 ```
+
+
+지금 작성된 버전은 기본 구조 + 데이터 흐름 완성 버전이고, 이후에 작업 요청 JSON 고도화, Kata Container 연동 등 세부 단계로 확장  
+
+🔗 전체 작성 파일
+central/report_db.py : 리포트 CSV 저장
+
+central/report_receiver.py : 리포트 TCP 수신 서버
+
+central/report_verifier.py : 리포트 무결성 검증 (hash 기반)
+
+node/config.py : IP, 포트 설정
+
+node/launcher.py : 서비스 실행 진입점
+
+node/service.py : 더미 작업 수행 + 리포트 전송
