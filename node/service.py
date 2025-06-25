@@ -1,4 +1,3 @@
-# mutual_cloud/node/service.py
 import socket
 import json
 import time
