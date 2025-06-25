@@ -2,7 +2,17 @@
 ✔️ core/: 작업 처리 핵심 (작업 관리, Kata 실행, 모니터링, 리포트 관리)  
 ✔️ network/: TCP 서버/클라이언트 → 공용 사용  
 ✔️ crypto/: 암호화 전용 유틸 (공용 사용)  
-✔️ service.py: 하나의 Python 스크립트에서 "내가 지금 수요 모드인지, 공급 모드인지" 스위칭 제어  
+✔️ service.py: 하나의 Python 스크립트에서 "내가 지금 수요 모드인지, 공급 모드인지" 스위칭 제어
+✔️ policy_agent.py: 자원 사용률 기반으로 요청 수락/거절 판단 (분산 자율 정책 구현의 핵심)  
+✔️ http_server.py: 파일 수신 및 결과 반환을 HTTP로 처리 (REST API 기반 전송)  
+✔️ container_executor.py: 작업을 Docker 또는 Kata Containers 격리 환경에서 실행  
+✔️ report_manager.py: 작업 결과를 리포트로 정리하여 중앙에 전송 (수요자 피드백 포함 가능)  
+✔️ central/: 리포트 보관소 역할 (완전한 중앙 제어자가 아님, 장애 감시/기록용)  
+✔️ tests/: 각 모듈 기능이 올바르게 작동하는지 자동화된 단위 테스트 수행  
+✔️ utils/: 압축, 파일 I/O 등 반복되는 기능을 정리한 보조 함수 공간  
+✔️ requirements.txt: 실행에 필요한 필수 라이브러리 정의 (Flask, requests 등)  
+✔️ dev-requirements.txt: 개발자용 테스트/디버깅 도구 정의 (pytest, docker 등)
+
   
 ```
 mutual_cloud/
