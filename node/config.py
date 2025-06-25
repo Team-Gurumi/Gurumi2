@@ -1,0 +1,4 @@
+# mutual_cloud/node/config.py
+TAILSCALE_IP = '100.100.100.1'
+REPORT_SERVER_IP = '100.100.100.2'
+REPORT_SERVER_PORT = 6000
